@@ -32,7 +32,7 @@ public class Rfq implements Serializable {
                 ", price=" + price +
                 ", side=" + side +
                 '}';
-    }
+}
 
     public boolean isBuySide() {
         return "B".equals(side);
