@@ -1,5 +1,7 @@
 # Java Beans
 ## Team Members
  - Olivia Powers
- - two
- - three
+ - Angel Karfas
+ - Quint Flores
+ - Ejikeme Udechukwu
+ - Guan Chou
