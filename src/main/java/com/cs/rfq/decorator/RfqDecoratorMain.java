@@ -30,12 +30,8 @@ public class RfqDecoratorMain {
         //TODO: create a new RfqProcessor and set it listening for incoming RFQs
         RfqProcessor rfqprocess = new RfqProcessor (session, jssc);
         JavaDStream<String> lines = jssc.socketTextStream("localhost", 9000);
-        JavaDStream<String> words = lines.flatMap(x -> Arrays.asList(x.split(" ")).iterator());
+        rfqprocess.startSocketListener();
 
-        //print out the results for the listening result
-        words.foreachRDD(rdd -> {
-            rdd.collect().forEach(line -> consume(line));
-        });
 
 
         jssc.start();
