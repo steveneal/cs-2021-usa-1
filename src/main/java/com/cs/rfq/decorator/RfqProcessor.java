@@ -33,6 +33,8 @@ public class RfqProcessor {
 
     private final MetadataPublisher publisher = new MetadataJsonLogPublisher();
 
+
+
     public RfqProcessor(SparkSession session, JavaStreamingContext streamingContext) {
         this.session = session;
         this.streamingContext = streamingContext;
@@ -52,6 +54,7 @@ public class RfqProcessor {
 
         //TODO: convert each incoming line to a Rfq object and call processRfq method with it
         Rfq  rfqobj = new Rfq();
+
         JavaDStream<Rfq> words = lines.map(x ->(rfqobj.fromJson(x)));
         words.foreachRDD(rdd -> {
             rdd.collect().forEach(line -> processRfq(line));
@@ -75,5 +78,9 @@ public class RfqProcessor {
        }
         //TODO: publish the metadata
         publisher.publishMetadata(metadata);
+    }
+
+    static void consume(String line) {
+        System.out.println(line);
     }
 }
