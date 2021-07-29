@@ -1,7 +1,7 @@
 # Java Beans
 ## Team Members
- - Olivia Powers
- - Angel Karfas
- - Quint Flores
- - Ejikeme Udechukwu
- - Guan Chou
+ - Olivia Powers (Scrum master + Dev)
+ - Angel Karfas (Dev)
+ - Quint Flores (Product owner)
+ - Ejikeme Udechukwu (co-product owner)
+ - Guan Chou (Dev)
