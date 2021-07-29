@@ -32,7 +32,6 @@ public class RfqDecoratorMain {
         //JavaDStream<String> lines = jssc.socketTextStream("localhost", 9000);
         rfqprocess.startSocketListener();
 
-
         jssc.start();
         jssc.awaitTermination();
 

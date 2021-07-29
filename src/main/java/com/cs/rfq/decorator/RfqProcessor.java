@@ -39,7 +39,6 @@ public class RfqProcessor {
 
         //TODO: use the TradeDataLoader to load the trade data archives
 
-
         //TODO: take a close look at how these two extractors are implemented
         extractors.add(new TotalTradesWithEntityExtractor());
         extractors.add(new VolumeTradedWithEntityYTDExtractor());
@@ -49,10 +48,7 @@ public class RfqProcessor {
         //TODO: stream data from the input socket on localhost:9000
         JavaDStream<String> lines = streamingContext.socketTextStream("localhost", 9000);
         //TODO: convert each incoming line to a Rfq object and call processRfq method with it
-
-        Rfq  rfqobj = new Rfq();
-        JavaDStream<Rfq> words = lines.map(x ->(rfqobj.fromJson(x)));
-
+        JavaDStream<Rfq> words = lines.map(x -> new Rfq().fromJson(x));
         //TODO: start the streaming context
         words.foreachRDD(rdd -> {
             rdd.collect().forEach(line -> processRfq(line));
