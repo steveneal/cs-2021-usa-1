@@ -51,10 +51,12 @@ public class RfqProcessor {
 
         //TODO: stream data from the input socket on localhost:9000
         JavaDStream<String> lines = streamingContext.socketTextStream("localhost", 9000);
-
+        JavaDStream<String> wordsp = lines.map(x -> x);
+        wordsp.foreachRDD(rdd -> {
+            rdd.collect().forEach(line -> consume(line));
+        });
         //TODO: convert each incoming line to a Rfq object and call processRfq method with it
         Rfq  rfqobj = new Rfq();
-
         JavaDStream<Rfq> words = lines.map(x ->(rfqobj.fromJson(x)));
         words.foreachRDD(rdd -> {
             rdd.collect().forEach(line -> processRfq(line));
