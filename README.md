@@ -1,5 +1,5 @@
-# Please provide a Team Name
+# Java Beans
 ## Team Members
- - one
+ - Olivia Powers
  - two
  - three
