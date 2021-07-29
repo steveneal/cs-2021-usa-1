@@ -26,13 +26,13 @@ public class Rfq implements Serializable {
         //TODO: build a new RFQ setting all fields from data passed in the RFQ json message
         JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
         Rfq rfq = new Rfq();
-        rfq.id = jsonObject.get("id").toString();
-        rfq.isin = jsonObject.get("isin").toString();
+        rfq.id = jsonObject.get("id").getAsString();
+        rfq.isin = jsonObject.get("instrumentId").getAsString();
         rfq.traderId = jsonObject.get("traderId").getAsLong();
         rfq.entityId = jsonObject.get("entityId").getAsLong();
-        rfq.quantity = jsonObject.get("quantity").getAsLong();
+        rfq.quantity = jsonObject.get("qty").getAsLong();
         rfq.price = jsonObject.get("price").getAsDouble();
-        rfq.side = jsonObject.get("side").toString();
+        rfq.side = jsonObject.get("side").getAsString();
         return rfq;
     }
 

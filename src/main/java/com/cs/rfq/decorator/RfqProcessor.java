@@ -39,6 +39,7 @@ public class RfqProcessor {
 
         //TODO: use the TradeDataLoader to load the trade data archives
 
+
         //TODO: take a close look at how these two extractors are implemented
         extractors.add(new TotalTradesWithEntityExtractor());
         extractors.add(new VolumeTradedWithEntityYTDExtractor());
@@ -48,27 +49,30 @@ public class RfqProcessor {
         //TODO: stream data from the input socket on localhost:9000
         JavaDStream<String> lines = streamingContext.socketTextStream("localhost", 9000);
         //TODO: convert each incoming line to a Rfq object and call processRfq method with it
-        JavaDStream<Rfq> words = lines.map(x -> new Rfq().fromJson(x));
+
+        Rfq  rfqobj = new Rfq();
+        JavaDStream<Rfq> words = lines.map(x ->(rfqobj.fromJson(x)));
+
         //TODO: start the streaming context
         words.foreachRDD(rdd -> {
-            rdd.collect().forEach(line -> consume(words.toString()));
+            rdd.collect().forEach(line -> processRfq(line));
         });
         streamingContext.start();
     }
-    private static void consume(String line) {
-        System.out.println(line);
-    }
+
     public void processRfq(Rfq rfq) {
+        System.out.println(rfq.toString());
         log.info(String.format("Received Rfq: %s", rfq.toString()));
 
         //create a blank map for the metadata to be collected
         Map<RfqMetadataFieldNames, Object> metadata = new HashMap<>();
 
         //TODO: get metadata from each of the extractors
-//        for (RfqMetadataExtractor extractor: extractors) {
-//            metadata.put(extractor, extractor.extractMetaData(rfq, session, trades));
-//        }
+        for (RfqMetadataExtractor extractor: extractors) {
+          metadata.putAll(extractor.extractMetaData(rfq, session, trades));
+
+       }
         //TODO: publish the metadata
-//        publisher.publishMetadata(metadata);
+        publisher.publishMetadata(metadata);
     }
 }

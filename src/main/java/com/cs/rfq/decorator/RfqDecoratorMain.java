@@ -29,9 +29,8 @@ public class RfqDecoratorMain {
 
         //TODO: create a new RfqProcessor and set it listening for incoming RFQs
         RfqProcessor rfqprocess = new RfqProcessor (session, jssc);
-        JavaDStream<String> lines = jssc.socketTextStream("localhost", 9000);
+        //JavaDStream<String> lines = jssc.socketTextStream("localhost", 9000);
         rfqprocess.startSocketListener();
-
 
 
         jssc.start();
