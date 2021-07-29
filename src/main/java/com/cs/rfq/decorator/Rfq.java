@@ -1,7 +1,13 @@
 package com.cs.rfq.decorator;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+import netscape.javascript.JSObject;
+import org.json4s.jackson.Json;
+import scala.util.parsing.json.JSONArray;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
@@ -18,7 +24,16 @@ public class Rfq implements Serializable {
 
     public static Rfq fromJson(String json) {
         //TODO: build a new RFQ setting all fields from data passed in the RFQ json message
-        return null;
+        JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
+        Rfq rfq = new Rfq();
+        rfq.id = jsonObject.get("id").toString();
+        rfq.isin = jsonObject.get("isin").toString();
+        rfq.traderId = jsonObject.get("traderId").getAsLong();
+        rfq.entityId = jsonObject.get("entityId").getAsLong();
+        rfq.quantity = jsonObject.get("quantity").getAsLong();
+        rfq.price = jsonObject.get("price").getAsDouble();
+        rfq.side = jsonObject.get("side").toString();
+        return rfq;
     }
 
     @Override
