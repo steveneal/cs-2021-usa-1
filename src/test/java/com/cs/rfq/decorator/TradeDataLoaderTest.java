@@ -31,6 +31,8 @@ public class TradeDataLoaderTest extends AbstractSparkUnitTest {
     public void loadTradeFields() {
         assertEquals(5, trades.count());
 
+//        trades.printSchema();
+        System.out.println(trades.first());
         Long traderId = trades.first().getLong(0);
         Long entityId = trades.first().getLong(1);
         String securityId = trades.first().getString(2);
