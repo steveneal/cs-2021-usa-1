@@ -12,6 +12,8 @@ import org.mortbay.log.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Struct;
+
 import static org.apache.spark.sql.types.DataTypes.*;
 
 public class TradeDataLoader {
@@ -23,23 +25,20 @@ public class TradeDataLoader {
         StructType schema = new StructType(new StructField[]{
                 new StructField("TraderId", LongType, true, Metadata.empty()),
                 new StructField("EntityId", LongType, true, Metadata.empty()),
-                new StructField("SecurityId", StringType, true, Metadata.empty()),
+                new StructField("SecurityID", StringType, true, Metadata.empty()),
                 new StructField("LastQty", LongType, true, Metadata.empty()),
                 new StructField("LastPx", DoubleType, true, Metadata.empty()),
+                new StructField("TradeDate", DateType, true, Metadata.empty()),
+                new StructField("Currency", StringType, true, Metadata.empty()),
                 new StructField("Side", IntegerType, true, Metadata.empty()),
                 new StructField("MsgType", IntegerType, true, Metadata.empty()),
                 new StructField("TradeReportId", LongType, true, Metadata.empty()),
                 new StructField("PreviouslyReported", StringType, true, Metadata.empty()),
                 new StructField("SecurityIdSource", IntegerType, true, Metadata.empty()),
-                new StructField("TradeDate", DateType, true, Metadata.empty()),
-                new StructField("TransactTime", TimestampType, true, Metadata.empty()),
+                new StructField("TransactTime", StringType, true, Metadata.empty()),
                 new StructField("NoSides", IntegerType, true, Metadata.empty()),
                 new StructField("OrderID", LongType, true, Metadata.empty()),
-                new StructField("Currency", StringType, true, Metadata.empty())
-
         });
-
-//        'TraderId':5419847817764717882, 'EntityId':5561279226039690843, 'MsgType':35, 'TradeReportId':3141628235479330982, 'PreviouslyReported':'N', 'SecurityID':'AT0000A001X2', 'SecurityIdSource':4, 'LastQty':100000, 'LastPx':112.023, 'TradeDate':'2020-07-30', 'TransactTime':'20200730-13:14:52', 'NoSides':1, 'Side':1, 'OrderID':3138272914859569503, 'Currency':'EUR'}
 
         //TODO: load the trades dataset
         Dataset<Row> trades = session.read().schema(schema).json(path);
@@ -48,7 +47,6 @@ public class TradeDataLoader {
         long loaded = trades.count();
         log.info(String.format("Number of records loaded %d%n", loaded));
         Log.info(schema.toString());
-
         return trades;
     }
 
