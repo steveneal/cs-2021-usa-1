@@ -46,7 +46,7 @@ public class TradeDataLoader {
         //TODO: log a message indicating number of records loaded and the schema used
         long loaded = trades.count();
         log.info(String.format("Number of records loaded %d%n", loaded));
-        Log.info(schema.toString());
+        log.info(schema.toString());
         return trades;
     }
 
