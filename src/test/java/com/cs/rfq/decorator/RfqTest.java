@@ -1,5 +1,6 @@
 package com.cs.rfq.decorator;
 
+import com.cs.rfq.utils.ChatterboxServer;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,6 +32,13 @@ public class RfqTest {
                 () -> assertTrue(rfq.isBuySide()),
                 () -> assertFalse(rfq.isSellSide())
         );
+
+    }
+
+    @Test
+    public void testConn() {
+
+        ChatterboxServer service = new ChatterboxServer();
 
     }
 }

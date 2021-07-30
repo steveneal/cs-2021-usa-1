@@ -75,11 +75,13 @@ public class RfqProcessor {
 
         //TODO: get metadata from each of the extractors
         for (RfqMetadataExtractor extractor: extractors) {
-          metadata.putAll(extractor.extractMetaData(rfq, session, trades));
+
+         metadata.putAll(extractor.extractMetaData(rfq, session, trades));
+            // extractor.extractMetaData(rfq, session, trades);
 
        }
         //TODO: publish the metadata
-        publisher.publishMetadata(metadata);
+        //publisher.publishMetadata(metadata);
     }
 
     static void consume(String line) {
