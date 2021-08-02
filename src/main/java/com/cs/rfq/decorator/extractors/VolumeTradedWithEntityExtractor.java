@@ -16,7 +16,9 @@ public class VolumeTradedWithEntityExtractor implements RfqMetadataExtractor {
     private DateTime since;
 
     public VolumeTradedWithEntityExtractor() {
+
         this.since = DateTime.now();
+
     }
 
     @Override

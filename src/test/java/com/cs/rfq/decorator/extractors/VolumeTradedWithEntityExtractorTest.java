@@ -30,6 +30,7 @@ public class VolumeTradedWithEntityExtractorTest extends AbstractSparkUnitTest {
     public void checkVolumeWhenAllTradesMatch() {
 
         VolumeTradedWithEntityYTDExtractor extractor = new VolumeTradedWithEntityYTDExtractor();
+
         extractor.setSince("2018-01-01");
 
         Map<RfqMetadataFieldNames, Object> meta = extractor.extractMetaData(rfq, session, trades);
