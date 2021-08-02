@@ -13,21 +13,10 @@ import static com.cs.rfq.decorator.extractors.RfqMetadataFieldNames.*;
 
 public class VolumeTradedWithEntityExtractor implements RfqMetadataExtractor {
 
-    private String since;
-
-
-    public VolumeTradedWithEntityExtractor() {
-
-        this.since = DateTime.now().toString();
-
-    }
 
     @Override
     public Map<RfqMetadataFieldNames, Object> extractMetaData(Rfq rfq, SparkSession session, Dataset<Row> trades) {
 
-        //DateTime pastWeekMs = this.since.minusWeeks(1);
-        //DateTime pasteMonthMs = this.since.minusMonths(1);
-        //DateTime pastYearMs = this.since.minusYears(1);
         String pastWeekMs = DateTime.now().minusWeeks(1).toString().substring(0,10);
         String pastMonthMs = DateTime.now().minusMonths(1).toString().substring(0,10);
         String pastYearMs = DateTime.now().minusYears(1).toString().substring(0,10);

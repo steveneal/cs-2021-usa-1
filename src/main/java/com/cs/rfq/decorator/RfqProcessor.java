@@ -46,7 +46,6 @@ public class RfqProcessor {
         extractors.add(new VolumeTradedWithEntityYTDExtractor());
         extractors.add(new VolumeTradedWithInstrumentExtractor());
         extractors.add(new VolumeTradedWithEntityExtractor());
-        //extractors.add(new IlliquidExtractor());
     }
 
     public void startSocketListener() throws InterruptedException {
@@ -78,7 +77,6 @@ public class RfqProcessor {
         for (RfqMetadataExtractor extractor: extractors) {
 
          metadata.putAll(extractor.extractMetaData(rfq, session, trades));
-            // extractor.extractMetaData(rfq, session, trades);
        }
         //TODO: publish the metadata
         publisher.publishMetadata(metadata);

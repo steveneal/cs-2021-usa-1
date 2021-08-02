@@ -29,24 +29,12 @@ public class RfqDecoratorMain {
 
         //TODO: create a new RfqProcessor and set it listening for incoming RFQs
         RfqProcessor rfqprocess = new RfqProcessor (session, jssc);
-        //JavaDStream<String> lines = jssc.socketTextStream("localhost", 9000);
         rfqprocess.startSocketListener();
 
         jssc.start();
         jssc.awaitTermination();
 
-        //for the job to call
-//        JavaSparkContext spark = new JavaSparkContext(session.sparkContext());
-//        List<String> words2 = Arrays.asList("Hello", "World");
-//        List<String> processed = spark.parallelize(words2).map(String::toUpperCase).collect();
-//        processed.forEach(System.out::println);
-
-//        spark.stop();
 
 }
-
-    static void consume(String line) {
-        System.out.println(line);
-    }
 
 }
