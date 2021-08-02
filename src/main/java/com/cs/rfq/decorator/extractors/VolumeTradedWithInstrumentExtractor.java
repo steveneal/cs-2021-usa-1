@@ -11,7 +11,7 @@ import java.util.Map;
 
 import static com.cs.rfq.decorator.extractors.RfqMetadataFieldNames.*;
 
-public class VolumeTradedWithEntityExtractor implements RfqMetadataExtractor {
+public class VolumeTradedWithInstrumentExtractor implements RfqMetadataExtractor {
 
     @Override
     public Map<RfqMetadataFieldNames, Object> extractMetaData(Rfq rfq, SparkSession session, Dataset<Row> trades) {
@@ -20,17 +20,17 @@ public class VolumeTradedWithEntityExtractor implements RfqMetadataExtractor {
 //        add month
         DateTime pastYearMs = DateTime.now().minusYears(1);
 
-        String volumeTodayQuery = String.format("SELECT sum(LastQty) from trade where TraderId='%s' AND EntityId='%s' AND TradeDate >= '%s'",
+        String volumeTodayQuery = String.format("SELECT sum(LastQty) from trade where TraderId='%s' AND SecurityID='%s' AND TradeDate >= '%s'",
                 rfq.getTraderId(),
-                rfq.getEntityId(),
+                rfq.getIsin(),
                 todayMs);
-        String volumePastWeekQuery = String.format("SELECT sum(LastQty) from trade where TraderId='%s' AND EntityId='%s' AND TradeDate >= '%s'",
+        String volumePastWeekQuery = String.format("SELECT sum(LastQty) from trade where TraderId='%s' AND SecurityID='%s' AND TradeDate >= '%s'",
                 rfq.getTraderId(),
-                rfq.getEntityId(),
+                rfq.getIsin(),
                 pastWeekMs);
-        String volumePastYearQuery = String.format("SELECT sum(LastQty) from trade where TraderId='%s' AND EntityId='%s' AND TradeDate >= '%s'",
+        String volumePastYearQuery = String.format("SELECT sum(LastQty) from trade where TraderId='%s' AND SecurityID='%s' AND TradeDate >= '%s'",
                 rfq.getTraderId(),
-                rfq.getEntityId(),
+                rfq.getIsin(),
                 pastYearMs);
 
         trades.createOrReplaceTempView("trade");
