@@ -34,12 +34,12 @@ public class VolumeTradedWithInstrumentExtractor implements RfqMetadataExtractor
                 pastYearMs);
 
         trades.createOrReplaceTempView("trade");
-        Dataset<Row> volTodayResults = session.sql(volumePastWeekQuery);
-        Dataset<Row> volWeekResults = session.sql(volumePastMonthQuery);
+        Dataset<Row> volWeekResults = session.sql(volumePastWeekQuery);
+        Dataset<Row> volMonthResults = session.sql(volumePastMonthQuery);
         Dataset<Row> volYearResults = session.sql(volumePastYearQuery);
 
-        Object volumeWeek = volTodayResults.first().get(0);
-        Object volumeMonth = volWeekResults.first().get(0);
+        Object volumeWeek = volWeekResults.first().get(0);
+        Object volumeMonth = volMonthResults.first().get(0);
         Object volumeYear = volYearResults.first().get(0);
         if (volumeWeek == null) {
             volumeWeek = 0L;
