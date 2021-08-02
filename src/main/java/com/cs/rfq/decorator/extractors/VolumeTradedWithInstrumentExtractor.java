@@ -16,10 +16,9 @@ public class VolumeTradedWithInstrumentExtractor implements RfqMetadataExtractor
 
     @Override
     public Map<RfqMetadataFieldNames, Object> extractMetaData(Rfq rfq, SparkSession session, Dataset<Row> trades) {
-        DateTime todayMs = DateTime.now();
-        DateTime pastWeekMs = DateTime.now().minusWeeks(1);
-        DateTime pastMonthMs = DateTime.now().minusMonths(1);
-        DateTime pastYearMs = DateTime.now().minusYears(1);
+        String pastWeekMs = DateTime.now().minusWeeks(1).toString().substring(0,10);
+        String pastMonthMs = DateTime.now().minusMonths(1).toString().substring(0,10);
+        String pastYearMs = DateTime.now().minusYears(1).toString().substring(0,10);
 
         String volumePastWeekQuery = String.format("SELECT sum(LastQty) from trade where TraderId='%s' AND SecurityID='%s' AND TradeDate >= '%s'",
                 rfq.getTraderId(),
@@ -58,4 +57,5 @@ public class VolumeTradedWithInstrumentExtractor implements RfqMetadataExtractor
         results.put(instrumentVolumeTradedPastYear, volumeYear);
         return results;
     }
+
 }
