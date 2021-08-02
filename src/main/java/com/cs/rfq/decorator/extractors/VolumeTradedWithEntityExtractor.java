@@ -16,21 +16,19 @@ public class VolumeTradedWithEntityExtractor implements RfqMetadataExtractor {
     @Override
     public Map<RfqMetadataFieldNames, Object> extractMetaData(Rfq rfq, SparkSession session, Dataset<Row> trades) {
 
-        DateTime todayMs = DateTime.now();
-
         DateTime pastWeekMs = DateTime.now().minusWeeks(1);
-//
+        DateTime pasteMonthMs = DateTime.now().minusMonths(1);
         DateTime pastYearMs = DateTime.now().minusYears(1);
-
-        String volumeTodayQuery = String.format("SELECT sum(LastQty) from trade where EntityId='%s' AND TradeDate >= '%s'",
-                //rfq.getTraderId(),
-                rfq.getEntityId(),
-                todayMs);
 
         String volumePastWeekQuery = String.format("SELECT sum(LastQty) from trade where EntityId='%s' AND TradeDate >= '%s'",
                 //rfq.getTraderId(),
                 rfq.getEntityId(),
                 pastWeekMs);
+
+        String volumePastMonthQuery = String.format("SELECT sum(LastQty) from trade where EntityId='%s' AND TradeDate >= '%s'",
+                //rfq.getTraderId(),
+                rfq.getEntityId(),
+                pasteMonthMs);
 
         String volumePastYearQuery = String.format("SELECT sum(LastQty) from trade where EntityId='%s' AND TradeDate >= '%s'",
                 //rfq.getTraderId(),
@@ -38,28 +36,28 @@ public class VolumeTradedWithEntityExtractor implements RfqMetadataExtractor {
                 pastYearMs);
 
         trades.createOrReplaceTempView("trade");
-        Dataset<Row> volTodayResults = session.sql(volumeTodayQuery);
         Dataset<Row> volWeekResults = session.sql(volumePastWeekQuery);
+        Dataset<Row> volMonthResults = session.sql(volumePastMonthQuery);
         Dataset<Row> volYearResults = session.sql(volumePastYearQuery);
 
-        Object volumeToday = volTodayResults.first().get(0);
-        Object volumeWeek = volWeekResults.first().get(0);
-        Object volumeYear = volYearResults.first().get(0);
+        Object volumePastWeek = volWeekResults.first().get(0);
+        Object volumePastMonth = volMonthResults.first().get(0);
+        Object volumePastYear = volYearResults.first().get(0);
 
-        if (volumeToday == null) {
-            volumeToday = 0L;
+        if (volumePastWeek == null) {
+            volumePastWeek = 0L;
         }
-        if (volumeWeek == null) {
-            volumeWeek = 0L;
+        if (volumePastMonth == null) {
+            volumePastMonth = 0L;
         }
-        if (volumeYear == null) {
-            volumeYear = 0L;
+        if (volumePastYear == null) {
+            volumePastYear = 0L;
         }
 
         Map<RfqMetadataFieldNames, Object> results = new HashMap<>();
-        results.put(tradesWithEntityToday, volumeToday);
-        results.put(tradesWithEntityPastWeek, volumeWeek);
-        results.put(tradesWithEntityPastYear, volumeYear);
+        results.put(entityVolumeTradedPastWeek, volumePastWeek);
+        results.put(entityVolumeTradedPastMonth, volumePastMonth);
+        results.put(entityVolumeTradedPastYear, volumePastYear);
         return results;
     }
 }
