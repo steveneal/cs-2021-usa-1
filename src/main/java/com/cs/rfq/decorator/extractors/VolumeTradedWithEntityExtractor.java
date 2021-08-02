@@ -13,12 +13,18 @@ import static com.cs.rfq.decorator.extractors.RfqMetadataFieldNames.*;
 
 public class VolumeTradedWithEntityExtractor implements RfqMetadataExtractor {
 
+    private DateTime since;
+
+    public VolumeTradedWithEntityExtractor() {
+        this.since = DateTime.now();
+    }
+
     @Override
     public Map<RfqMetadataFieldNames, Object> extractMetaData(Rfq rfq, SparkSession session, Dataset<Row> trades) {
 
-        DateTime pastWeekMs = DateTime.now().minusWeeks(1);
-        DateTime pasteMonthMs = DateTime.now().minusMonths(1);
-        DateTime pastYearMs = DateTime.now().minusYears(1);
+        DateTime pastWeekMs = this.since.minusWeeks(1);
+        DateTime pasteMonthMs = this.since.minusMonths(1);
+        DateTime pastYearMs = this.since.minusYears(1);
 
         String volumePastWeekQuery = String.format("SELECT sum(LastQty) from trade where EntityId='%s' AND TradeDate >= '%s'",
                 //rfq.getTraderId(),
@@ -34,6 +40,7 @@ public class VolumeTradedWithEntityExtractor implements RfqMetadataExtractor {
                 //rfq.getTraderId(),
                 rfq.getEntityId(),
                 pastYearMs);
+
 
         trades.createOrReplaceTempView("trade");
         Dataset<Row> volWeekResults = session.sql(volumePastWeekQuery);
@@ -55,9 +62,11 @@ public class VolumeTradedWithEntityExtractor implements RfqMetadataExtractor {
         }
 
         Map<RfqMetadataFieldNames, Object> results = new HashMap<>();
+
         results.put(entityVolumeTradedPastWeek, volumePastWeek);
         results.put(entityVolumeTradedPastMonth, volumePastMonth);
         results.put(entityVolumeTradedPastYear, volumePastYear);
+
         return results;
     }
 }
