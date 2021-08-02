@@ -45,4 +45,28 @@ public class VolumeTradedWithEntityExtractorTest extends  AbstractSparkUnitTest{
         assertEquals((long) 850000, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastMonth));
         assertEquals((long) 1250000, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastYear));
     }
+
+
+    @Test
+    public void volumeEntityTest2() {
+        String validRfqJson = "{" +
+                "'id': '123ABC', " +
+                "'traderId': 5419847817764717882, " +
+                "'entityId': 5561279226039690847, " +
+                "'instrumentId': 'AT0000A001X2', " +
+                "'qty': 250000, " +
+                "'price': 1.58, " +
+                "'side': 'B' " +
+                "}";
+
+        Rfq rfq = Rfq.fromJson(validRfqJson);
+        Map<RfqMetadataFieldNames, Object> metadata = new HashMap<>();
+        VolumeTradedWithEntityExtractor extractor = new VolumeTradedWithEntityExtractor();
+
+        metadata.putAll(extractor.extractMetaData(rfq, session, trades));
+
+        assertEquals((long) 100000, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastWeek));
+        assertEquals((long) 100000, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastMonth));
+        assertEquals((long) 100000, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastYear));
+    }
 }
