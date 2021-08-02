@@ -8,6 +8,7 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +18,7 @@ public class VolumeTradedWithInstrumentExtractorTest extends  AbstractSparkUnitT
 
     @BeforeEach
     public void setup() {
-        String filePath = getClass().getResource("loader-test-trades.json").getPath();
+        String filePath = "src/test/resources/trades/simpleTrades.json";
         trades = new TradeDataLoader().loadTrades(session, filePath);
     }
 //    get trades, make rfq value and call method and make sure returns correct volumes
@@ -25,9 +26,9 @@ public class VolumeTradedWithInstrumentExtractorTest extends  AbstractSparkUnitT
     public void volumeCheck() {
         String validRfqJson = "{" +
                 "'id': '123ABC', " +
-                "'traderId': 3351266293154445953, " +
+                "'traderId': 5419847817764717882, " +
                 "'entityId': 5561279226039690843, " +
-                "'instrumentId': 'AT0000383864', " +
+                "'instrumentId': 'AT0000A001X2', " +
                 "'qty': 250000, " +
                 "'price': 1.58, " +
                 "'side': 'B' " +
@@ -37,6 +38,8 @@ public class VolumeTradedWithInstrumentExtractorTest extends  AbstractSparkUnitT
         Map<RfqMetadataFieldNames, Object> metadata = new HashMap<>();
         VolumeTradedWithInstrumentExtractor extractor = new VolumeTradedWithInstrumentExtractor();
         metadata.putAll(extractor.extractMetaData(rfq, session, trades));
-
+        System.out.println(metadata.get(RfqMetadataFieldNames.instrumentVolumeTradedPastWeek));
+        System.out.println(metadata.get(RfqMetadataFieldNames.instrumentVolumeTradedPastMonth));
+        System.out.println(metadata.get(RfqMetadataFieldNames.instrumentVolumeTradedPastYear));
     }
 }
