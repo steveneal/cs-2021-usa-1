@@ -24,7 +24,7 @@ public class VolumeTradedWithEntityExtractorTest extends  AbstractSparkUnitTest{
     }
 
     @Test
-    public void volumeEntityTest() {
+    public void volumeEntityRandomTest() {
         String validRfqJson = "{" +
                 "'id': '123ABC', " +
                 "'traderId': 5419847817764717882, " +
@@ -41,14 +41,14 @@ public class VolumeTradedWithEntityExtractorTest extends  AbstractSparkUnitTest{
 
         metadata.putAll(extractor.extractMetaData(rfq, session, trades));
 
-        assertEquals((long) 850000, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastWeek));
-        assertEquals((long) 850000, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastMonth));
-        assertEquals((long) 1250000, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastYear));
+        assertEquals((long) 333, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastWeek));
+        assertEquals((long) 444, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastMonth));
+        assertEquals((long) 666, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastYear));
     }
 
 
     @Test
-    public void volumeEntityTest2() {
+    public void volumeEntityTestwithSameYearandMonth() {
         String validRfqJson = "{" +
                 "'id': '123ABC', " +
                 "'traderId': 5419847817764717882, " +
@@ -65,8 +65,55 @@ public class VolumeTradedWithEntityExtractorTest extends  AbstractSparkUnitTest{
 
         metadata.putAll(extractor.extractMetaData(rfq, session, trades));
 
-        assertEquals((long) 100000, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastWeek));
-        assertEquals((long) 100000, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastMonth));
-        assertEquals((long) 100000, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastYear));
+        assertEquals((long) 100, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastWeek));
+        assertEquals((long) 600, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastMonth));
+        assertEquals((long) 600, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastYear));
+    }
+
+    @Test
+    public void volumeEntityTestwithEmptyId() {
+        String validRfqJson = "{" +
+                "'id': '123ABC', " +
+                "'traderId': 5419847817764717880, " +
+                "'entityId': 5561279226039690840, " +
+                "'instrumentId': 'AT0000A001X2', " +
+                "'qty': 250000, " +
+                "'price': 1.58, " +
+                "'side': 'B' " +
+                "}";
+
+        Rfq rfq = Rfq.fromJson(validRfqJson);
+        Map<RfqMetadataFieldNames, Object> metadata = new HashMap<>();
+        VolumeTradedWithEntityExtractor extractor = new VolumeTradedWithEntityExtractor();
+
+        metadata.putAll(extractor.extractMetaData(rfq, session, trades));
+
+        assertEquals((long) 0, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastWeek));
+        assertEquals((long) 0, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastMonth));
+        assertEquals((long) 0, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastYear));
+    }
+
+
+    @Test
+    public void volumeEntityTestToday() {
+        String validRfqJson = "{" +
+                "'id': '123ABC', " +
+                "'traderId': 5419847817764717882, " +
+                "'entityId': 5561279226039690849, " +
+                "'instrumentId': 'AT0000A001X2', " +
+                "'qty': 250000, " +
+                "'price': 1.58, " +
+                "'side': 'B' " +
+                "}";
+
+        Rfq rfq = Rfq.fromJson(validRfqJson);
+        Map<RfqMetadataFieldNames, Object> metadata = new HashMap<>();
+        VolumeTradedWithEntityExtractor extractor = new VolumeTradedWithEntityExtractor();
+
+        metadata.putAll(extractor.extractMetaData(rfq, session, trades));
+
+        assertEquals((long) 3, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastWeek));
+        assertEquals((long) 3, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastMonth));
+        assertEquals((long) 3, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastYear));
     }
 }
