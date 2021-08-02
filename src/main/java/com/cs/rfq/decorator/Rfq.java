@@ -24,6 +24,7 @@ public class Rfq implements Serializable {
 
     public static Rfq fromJson(String json) {
         //TODO: build a new RFQ setting all fields from data passed in the RFQ json message
+
         JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
         Rfq rfq = new Rfq();
         rfq.id = jsonObject.get("id").getAsString();

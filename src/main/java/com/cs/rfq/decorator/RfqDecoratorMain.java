@@ -32,12 +32,10 @@ public class RfqDecoratorMain {
         //JavaDStream<String> lines = jssc.socketTextStream("localhost", 9000);
         rfqprocess.startSocketListener();
 
-
         jssc.start();
         jssc.awaitTermination();
 
-
-        //for the job
+        //for the job to call
 //        JavaSparkContext spark = new JavaSparkContext(session.sparkContext());
 //        List<String> words2 = Arrays.asList("Hello", "World");
 //        List<String> processed = spark.parallelize(words2).map(String::toUpperCase).collect();

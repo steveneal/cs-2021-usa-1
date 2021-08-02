@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class VolumeTradedWithEntityExtractorTest extends  AbstractSparkUnitTest{
+
     Dataset<Row> trades;
 
     @BeforeEach
@@ -21,7 +22,7 @@ public class VolumeTradedWithEntityExtractorTest extends  AbstractSparkUnitTest{
         String filePath = "src/test/resources/trades/simpleTrades.json";
         trades = new TradeDataLoader().loadTrades(session, filePath);
     }
-    //    get trades, make rfq value and call method and make sure returns correct volumes
+
     @Test
     public void volumeEntityTest() {
         String validRfqJson = "{" +
@@ -39,7 +40,6 @@ public class VolumeTradedWithEntityExtractorTest extends  AbstractSparkUnitTest{
         VolumeTradedWithEntityExtractor extractor = new VolumeTradedWithEntityExtractor();
 
         metadata.putAll(extractor.extractMetaData(rfq, session, trades));
-
 
         assertEquals((long) 950000, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastWeek));
         assertEquals((long) 950000, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastMonth));
