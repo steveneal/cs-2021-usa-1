@@ -15,6 +15,7 @@ public class VolumeTradedWithEntityExtractor implements RfqMetadataExtractor {
 
     @Override
     public Map<RfqMetadataFieldNames, Object> extractMetaData(Rfq rfq, SparkSession session, Dataset<Row> trades) {
+
         DateTime todayMs = DateTime.now();
 
         DateTime pastWeekMs = DateTime.now().minusWeeks(1);
@@ -22,17 +23,17 @@ public class VolumeTradedWithEntityExtractor implements RfqMetadataExtractor {
         DateTime pastYearMs = DateTime.now().minusYears(1);
 
         String volumeTodayQuery = String.format("SELECT sum(LastQty) from trade where EntityId='%s' AND TradeDate >= '%s'",
-                rfq.getTraderId(),
+                //rfq.getTraderId(),
                 rfq.getEntityId(),
                 todayMs);
 
         String volumePastWeekQuery = String.format("SELECT sum(LastQty) from trade where EntityId='%s' AND TradeDate >= '%s'",
-                rfq.getTraderId(),
+                //rfq.getTraderId(),
                 rfq.getEntityId(),
                 pastWeekMs);
 
         String volumePastYearQuery = String.format("SELECT sum(LastQty) from trade where EntityId='%s' AND TradeDate >= '%s'",
-                rfq.getTraderId(),
+                //rfq.getTraderId(),
                 rfq.getEntityId(),
                 pastYearMs);
 
@@ -44,7 +45,7 @@ public class VolumeTradedWithEntityExtractor implements RfqMetadataExtractor {
         Object volumeToday = volTodayResults.first().get(0);
         Object volumeWeek = volWeekResults.first().get(0);
         Object volumeYear = volYearResults.first().get(0);
-        
+
         if (volumeToday == null) {
             volumeToday = 0L;
         }
@@ -56,9 +57,9 @@ public class VolumeTradedWithEntityExtractor implements RfqMetadataExtractor {
         }
 
         Map<RfqMetadataFieldNames, Object> results = new HashMap<>();
-        results.put(instruentVolumeTradedToday, volumeToday);
-        results.put(instrumentVolumeTradedPastWeek, volumeWeek);
-        results.put(instrumentVolumeTradedPastYear, volumeYear);
+        results.put(tradesWithEntityToday, volumeToday);
+        results.put(tradesWithEntityPastWeek, volumeWeek);
+        results.put(tradesWithEntityPastYear, volumeYear);
         return results;
     }
 }
