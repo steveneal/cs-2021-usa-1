@@ -7,12 +7,13 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class VolumeTradedWithInstrumentExtractorTest extends  AbstractSparkUnitTest{
+public class VolumeTradedWithInstrumentExtractorTest extends AbstractSparkUnitTest {
     Dataset<Row> trades;
 
     @BeforeEach
@@ -20,7 +21,7 @@ public class VolumeTradedWithInstrumentExtractorTest extends  AbstractSparkUnitT
         String filePath = "src/test/resources/trades/simpleTrades.json";
         trades = new TradeDataLoader().loadTrades(session, filePath);
     }
-//    get trades, make rfq value and call method and make sure returns correct volumes
+
     @Test
     public void volumeCheckSameWeekMonthValues() {
         String validRfqJson = "{" +
@@ -32,7 +33,7 @@ public class VolumeTradedWithInstrumentExtractorTest extends  AbstractSparkUnitT
                 "'price': 1.58, " +
                 "'side': 'B' " +
                 "}";
-//   test  {'id': '123ABC', 'traderId': 3351266293154445953, 'entityId': 5561279226039690843, 'instrumentId': 'AT0000383864', 'qty': 250000, 'price': 1.58, 'side': 'B'}
+//  test chatterbox  {'id': '123ABC', 'traderId': 3351266293154445953, 'entityId': 5561279226039690843, 'instrumentId': 'AT0000383864', 'qty': 250000, 'price': 1.58, 'side': 'B'}
         Rfq rfq = Rfq.fromJson(validRfqJson);
         Map<RfqMetadataFieldNames, Object> metadata = new HashMap<>();
         VolumeTradedWithInstrumentExtractor extractor = new VolumeTradedWithInstrumentExtractor();
@@ -43,6 +44,7 @@ public class VolumeTradedWithInstrumentExtractorTest extends  AbstractSparkUnitT
                 () -> assertEquals((long) 1350000, metadata.get(RfqMetadataFieldNames.instrumentVolumeTradedPastYear))
         );
     }
+
     @Test
     public void volumeCheckDifferentWeekMonthYearValues() {
         String validRfqJson = "{" +
