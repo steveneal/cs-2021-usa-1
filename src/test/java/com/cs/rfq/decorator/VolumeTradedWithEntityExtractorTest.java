@@ -40,8 +40,9 @@ public class VolumeTradedWithEntityExtractorTest extends  AbstractSparkUnitTest{
 
         metadata.putAll(extractor.extractMetaData(rfq, session, trades));
 
-        System.out.println(metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastWeek));
-        //System.out.println(metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastMonth));
-        //System.out.println(metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastYear));
+
+        assertEquals((long) 950000, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastWeek));
+        assertEquals((long) 950000, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastMonth));
+        assertEquals((long) 1550000, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastYear));
     }
 }

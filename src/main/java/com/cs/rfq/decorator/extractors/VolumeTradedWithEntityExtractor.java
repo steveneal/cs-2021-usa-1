@@ -32,18 +32,18 @@ public class VolumeTradedWithEntityExtractor implements RfqMetadataExtractor {
         String pastMonthMs = DateTime.now().minusMonths(1).toString().substring(0,10);
         String pastYearMs = DateTime.now().minusYears(1).toString().substring(0,10);
 
-        String volumePastWeekQuery = String.format("SELECT sum(LastQty) from trade where EntityId='%s' AND TradeDate >= '%s'",
-                //rfq.getTraderId(),
+        String volumePastWeekQuery = String.format("SELECT sum(LastQty) from trade where TraderId='%s' AND EntityId='%s' AND TradeDate >= '%s'",
+                rfq.getTraderId(),
                 rfq.getEntityId(),
                 pastWeekMs);
 
-        String volumePastMonthQuery = String.format("SELECT sum(LastQty) from trade where EntityId='%s' AND TradeDate >= '%s'",
-                //rfq.getTraderId(),
+        String volumePastMonthQuery = String.format("SELECT sum(LastQty) from trade where TraderId='%s' AND EntityId='%s' AND TradeDate >= '%s'",
+                rfq.getTraderId(),
                 rfq.getEntityId(),
                 pastMonthMs);
 
-        String volumePastYearQuery = String.format("SELECT sum(LastQty) from trade where EntityId='%s' AND TradeDate >= '%s'",
-                //rfq.getTraderId(),
+        String volumePastYearQuery = String.format("SELECT sum(LastQty) from trade where TraderId='%s' AND EntityId='%s' AND TradeDate >= '%s'",
+                rfq.getTraderId(),
                 rfq.getEntityId(),
                 pastYearMs);
 
