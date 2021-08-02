@@ -2,45 +2,55 @@ package com.cs.rfq.decorator.extractors;
 
 import com.cs.rfq.decorator.Rfq;
 import com.cs.rfq.decorator.TradeDataLoader;
-import com.cs.rfq.utils.ChatterboxServer;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class VolumeTradedWithEntityExtractorTest extends AbstractSparkUnitTest {
+
+    private Rfq rfq;
     Dataset<Row> trades;
 
     @BeforeEach
     public void setup() {
-        String filePath = getClass().getResource("loader-test-trades.json").getPath();
-        trades = new TradeDataLoader().loadTrades(session, filePath);
-        assertEquals(5, trades.count());
+        rfq = new Rfq();
+        rfq.setEntityId(5561279226039690843L);
+        rfq.setIsin("AT0000A0VRQ6");
 
-        //rfq
-        String validRfqJson = "{" +
-                "'id': '123ABC', " +
-                "'traderId': 3351266293154445953, " +
-                "'entityId': 5561279226039690843, " +
-                "'instrumentId': 'AT0000383864', " +
-                "'qty': 250000, " +
-                "'price': 1.58, " +
-                "'side': 'B' " +
-                "}";
-        Rfq rfq = Rfq.fromJson(validRfqJson);
+        String filePath = getClass().getResource("volume-traded-1.json").getPath();
+        trades = new TradeDataLoader().loadTrades(session, filePath);
     }
 
+    @Test
+    public void checkVolumeWhenAllTradesMatch() {
+
+        VolumeTradedWithEntityYTDExtractor extractor = new VolumeTradedWithEntityYTDExtractor();
+        extractor.setSince("2018-01-01");
+
+        Map<RfqMetadataFieldNames, Object> meta = extractor.extractMetaData(rfq, session, trades);
+
+        Object result = meta.get(RfqMetadataFieldNames.volumeTradedYearToDate);
+
+        assertEquals(1_350_000L, result);
+    }
 
     @Test
-   public void testConn() {
+    public void checkVolumeWhenNoTradesMatch() {
 
-       ChatterboxServer service = new ChatterboxServer();
+        //all test trade data are for 2018 so this will cause no matches
+        VolumeTradedWithEntityYTDExtractor extractor = new VolumeTradedWithEntityYTDExtractor();
+        extractor.setSince("2019-01-01");
 
-   }
+        Map<RfqMetadataFieldNames, Object> meta = extractor.extractMetaData(rfq, session, trades);
 
+        Object result = meta.get(RfqMetadataFieldNames.volumeTradedYearToDate);
 
+        assertEquals(0L, result);
+    }
 
 }
