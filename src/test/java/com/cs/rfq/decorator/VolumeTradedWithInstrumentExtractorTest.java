@@ -1,7 +1,6 @@
 package com.cs.rfq.decorator;
 
 import com.cs.rfq.decorator.extractors.AbstractSparkUnitTest;
-import com.cs.rfq.decorator.extractors.RfqMetadataExtractor;
 import com.cs.rfq.decorator.extractors.RfqMetadataFieldNames;
 import com.cs.rfq.decorator.extractors.VolumeTradedWithInstrumentExtractor;
 import org.apache.spark.sql.Dataset;
@@ -38,8 +37,10 @@ public class VolumeTradedWithInstrumentExtractorTest extends  AbstractSparkUnitT
         Map<RfqMetadataFieldNames, Object> metadata = new HashMap<>();
         VolumeTradedWithInstrumentExtractor extractor = new VolumeTradedWithInstrumentExtractor();
         metadata.putAll(extractor.extractMetaData(rfq, session, trades));
-        System.out.println(metadata.get(RfqMetadataFieldNames.instrumentVolumeTradedPastWeek));
-        System.out.println(metadata.get(RfqMetadataFieldNames.instrumentVolumeTradedPastMonth));
-        System.out.println(metadata.get(RfqMetadataFieldNames.instrumentVolumeTradedPastYear));
+        assertAll(
+                () -> assertEquals((long) 950000, metadata.get(RfqMetadataFieldNames.instrumentVolumeTradedPastWeek)),
+                () -> assertEquals((long) 950000, metadata.get(RfqMetadataFieldNames.instrumentVolumeTradedPastMonth)),
+                () -> assertEquals((long) 1350000, metadata.get(RfqMetadataFieldNames.instrumentVolumeTradedPastYear))
+        );
     }
 }
