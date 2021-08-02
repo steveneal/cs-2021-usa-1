@@ -19,7 +19,7 @@ public class VolumeTradedWithEntityExtractorTest extends  AbstractSparkUnitTest{
 
     @BeforeEach
     public void setup() {
-        String filePath = "src/test/resources/trades/simpleTrades.json";
+        String filePath = "src/test/resources/trades/simpleTrades2.json";
         trades = new TradeDataLoader().loadTrades(session, filePath);
     }
 
@@ -41,8 +41,8 @@ public class VolumeTradedWithEntityExtractorTest extends  AbstractSparkUnitTest{
 
         metadata.putAll(extractor.extractMetaData(rfq, session, trades));
 
-        assertEquals((long) 950000, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastWeek));
-        assertEquals((long) 950000, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastMonth));
-        assertEquals((long) 1550000, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastYear));
+        assertEquals((long) 850000, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastWeek));
+        assertEquals((long) 850000, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastMonth));
+        assertEquals((long) 1250000, metadata.get(RfqMetadataFieldNames.entityVolumeTradedPastYear));
     }
 }
